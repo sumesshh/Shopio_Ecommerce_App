@@ -4,6 +4,7 @@ import 'package:shopio/models/product_models.dart';
 
 class ProductCards extends StatelessWidget {
   final Productmodels product;
+
   const ProductCards({super.key, required this.product});
 
   @override
@@ -12,40 +13,73 @@ class ProductCards extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Productdetails()),
+          MaterialPageRoute(builder: (_) => Productdetails(product: product)),
         );
       },
       child: Container(
-        width: 150,
+        width: 160,
         margin: const EdgeInsets.only(right: 12),
-        child: Container(
-          margin: EdgeInsets.only(left: 10),
-          width: 90,
-          height: 160,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(product.image, height: 100, fit: BoxFit.cover),
-              const SizedBox(height: 6),
-
-              Text(
-                style: TextStyle(fontWeight: FontWeight.bold),
-                product.name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 🔥 Product Image (From Firebase)
+            Expanded(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(12),
+                ),
+                child: Image.network(
+                  product.imageUrls.isNotEmpty ? product.imageUrls[0] : '',
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Center(child: Icon(Icons.image_not_supported)),
+                ),
               ),
-              const SizedBox(height: 6),
-              Text(
-                product.price,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 🔥 Product Name
+                  Text(
+                    product.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  // 🔥 Product Price
+                  Text(
+                    "₹${product.price}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

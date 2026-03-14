@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shopio/Pages/home_page.dart';
-import 'package:shopio/Pages/orderpage.dart';
+import 'package:shopio/Pages/cart_page.dart';
 import 'package:shopio/Pages/profilepage.dart';
 import 'package:shopio/widget/glossy_nav_button.dart';
+import '../Pages/categorypages.dart';
 
 class Bottomnavigationbar extends StatefulWidget {
   const Bottomnavigationbar({super.key});
@@ -19,7 +20,7 @@ class _BottomnavigationbarState extends State<Bottomnavigationbar> {
   @override
   void initState() {
     super.initState();
-    pages = const [HomePage(), Orderpage(), ProfilePage()];
+    pages = const [HomePage(), CategoriesPage(), CartPage(), ProfilePage()];
   }
 
   @override
@@ -52,8 +53,9 @@ class _BottomnavigationbarState extends State<Bottomnavigationbar> {
                 });
               },
             ),
+
             GlossyNavButton(
-              icon: Icons.shopping_bag_outlined,
+              icon: Icons.category_outlined,
               isActive: currentIndex == 1,
               onTap: () {
                 setState(() {
@@ -61,12 +63,22 @@ class _BottomnavigationbarState extends State<Bottomnavigationbar> {
                 });
               },
             ),
+
             GlossyNavButton(
-              icon: Icons.person_outline,
+              icon: Icons.shopping_bag_outlined,
               isActive: currentIndex == 2,
               onTap: () {
                 setState(() {
                   currentIndex = 2;
+                });
+              },
+            ),
+            GlossyNavButton(
+              icon: Icons.person_outline,
+              isActive: currentIndex == 3,
+              onTap: () {
+                setState(() {
+                  currentIndex = 3;
                 });
               },
             ),
