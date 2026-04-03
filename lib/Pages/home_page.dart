@@ -18,6 +18,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<Productmodels> allProducts = [];
+  List<Productmodels> searchResults = [];
+
+  final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -83,23 +87,23 @@ class _HomePageState extends State<HomePage> {
               /// SEARCH BAR
               Container(
                 padding: const EdgeInsets.only(left: 10),
-
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                 ),
-
                 child: TextField(
+                  controller: searchController,
+                  onChanged: (value) {
+                    print("SEARCH: $value");
+                    setState(() {});
+                  },
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Search Products",
-                    hintStyle: Appwidget.lightTextFieldStyle(),
-
-                    prefixIcon: const Icon(Icons.search, color: Colors.black),
+                    prefixIcon: Icon(Icons.search),
                   ),
                 ),
               ),
-
               const SizedBox(height: 25),
 
               /// CATEGORIES TITLE
@@ -230,23 +234,39 @@ class _HomePageState extends State<HomePage> {
 
                     final docs = snapshot.data!.docs;
 
+                    print("DOCS LENGTH: ${docs.length}");
+
                     if (docs.isEmpty) {
                       return const Center(child: Text("No Products"));
                     }
 
+                    //  Convert docs to product list
+                    final products = docs.map((doc) {
+                      return Productmodels.fromFirestore(
+                        doc.data() as Map<String, dynamic>,
+                        doc.id,
+                      );
+                    }).toList();
+
+                    //filter applying
+                    final displayList = searchController.text.isEmpty
+                        ? products
+                        : products.where((product) {
+                            return product.name.toLowerCase().contains(
+                              searchController.text.toLowerCase(),
+                            );
+                          }).toList();
+
+                    print("DISPLAY LIST: ${displayList.length}");
+
                     return ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: docs.length,
-
+                      itemCount: displayList.length,
                       itemBuilder: (context, index) {
-                        final product = Productmodels.fromFirestore(
-                          docs[index].data() as Map<String, dynamic>,
-                          docs[index].id,
-                        );
+                        final product = displayList[index];
 
                         return Padding(
                           padding: const EdgeInsets.only(right: 15),
-
                           child: GestureDetector(
                             onTap: () {
                               Navigator.push(
@@ -257,7 +277,6 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               );
                             },
-
                             child: ProductCards(product: product),
                           ),
                         );
@@ -274,4 +293,17 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  //search fun
+  // void searchProducts(String query) {
+  //   if (query.isEmpty) {
+  //     searchResults = [];
+  //   } else {
+  //     searchResults = allProducts.where((product) {
+  //       return product.name.toLowerCase().contains(query.toLowerCase());
+  //     }).toList();
+  //   }
+
+  //   setState(() {});
+  // }
 }

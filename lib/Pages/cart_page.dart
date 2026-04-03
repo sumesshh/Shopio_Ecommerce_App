@@ -10,7 +10,13 @@ class CartPage extends StatelessWidget {
     final cartProvider = Provider.of<CartProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text("My Cart")),
+      backgroundColor: Color(0xFFF2F2F2),
+
+      appBar: AppBar(
+        title: const Text("My Cart"),
+        centerTitle: true,
+        backgroundColor: Color(0xFFF2F2F2),
+      ),
 
       body: cartProvider.cartItems.isEmpty
           ? const Center(child: Text("Cart is empty"))
@@ -22,7 +28,7 @@ class CartPage extends StatelessWidget {
 
                 return ListTile(
                   leading: Image.network(
-                    product.imageUrls[0],
+                    product.mediaUrls[0],
                     width: 50,
                     height: 50,
                     fit: BoxFit.cover,

@@ -1,1 +1,39 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"shopio-bb520","appId":"1:163488846991:android:8b752d7581820e9ef20cfa","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"shopio-bb520","configurations":{"android":"1:163488846991:android:8b752d7581820e9ef20cfa","ios":"1:163488846991:ios:fd9a9aa2deced830f20cfa","macos":"1:163488846991:ios:fd9a9aa2deced830f20cfa","web":"1:163488846991:web:8ff4003662929b0df20cfa","windows":"1:163488846991:web:aff1c3543c9ee44bf20cfa"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "shopio-bb520",
+          "appId": "1:163488846991:android:8b752d7581820e9ef20cfa",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "shopio-bb520",
+          "configurations": {
+            "android": "1:163488846991:android:8b752d7581820e9ef20cfa",
+            "ios": "1:163488846991:ios:fd9a9aa2deced830f20cfa",
+            "macos": "1:163488846991:ios:fd9a9aa2deced830f20cfa",
+            "web": "1:163488846991:web:8ff4003662929b0df20cfa",
+            "windows": "1:163488846991:web:aff1c3543c9ee44bf20cfa"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

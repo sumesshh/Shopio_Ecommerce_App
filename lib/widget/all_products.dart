@@ -39,13 +39,21 @@ class ProductCards extends StatelessWidget {
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(12),
                 ),
-                child: Image.network(
-                  product.imageUrls.isNotEmpty ? product.imageUrls[0] : '',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Center(child: Icon(Icons.image_not_supported)),
-                ),
+                child: product.mediaUrls.isNotEmpty
+                    ? PageView(
+                        children: product.mediaUrls.map((url) {
+                          return Image.network(
+                            url,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Center(
+                                  child: Icon(Icons.image_not_supported),
+                                ),
+                          );
+                        }).toList(),
+                      )
+                    : const Center(child: Icon(Icons.image)),
               ),
             ),
 

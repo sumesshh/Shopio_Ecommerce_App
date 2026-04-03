@@ -71,6 +71,42 @@ class _LoginPageState extends State<LoginPage> {
 
                   const SizedBox(height: 30),
 
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () async {
+                        if (loginemailController.text.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Enter your email first"),
+                            ),
+                          );
+                          return;
+                        }
+
+                        String? error = await auth.resetPassword(
+                          loginemailController.text.trim(),
+                        );
+
+                        if (error != null) {
+                          ScaffoldMessenger.of(
+                            context,
+                          ).showSnackBar(SnackBar(content: Text(error)));
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Password reset email sent"),
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text(
+                        "Forgot Password?",
+                        style: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                  ),
+
                   GlassButton(
                     text: "Sign In",
                     isLoading: auth.isloading,
@@ -175,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-//////////////////////////////////////////////////////////////
+///////////////////////////////////
 
 class GlassButton extends StatelessWidget {
   final String text;

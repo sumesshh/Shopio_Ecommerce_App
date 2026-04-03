@@ -4,7 +4,7 @@
 //   final double price;
 //   final String description;
 //   final String category;
-//   final List<String> imageUrls;
+//   final List<String> mediaUrls;
 //   final String createdBy;
 
 //   Productmodels({
@@ -13,20 +13,37 @@
 //     required this.price,
 //     required this.description,
 //     required this.category,
-//     required this.imageUrls,
+//     required this.mediaUrls,
 //     required this.createdBy,
 //   });
 
 //   factory Productmodels.fromFirestore(Map<String, dynamic> data, String id) {
 //     return Productmodels(
 //       id: id,
-//       name: data['name'] ?? '',
-//       price: (data['price'] as num).toDouble(),
+//       // name: data['name'] ?? '',
+//       name: (data['name'] ?? '').toString().toLowerCase(),
+//       price: data['price'] is String
+//           ? double.tryParse(data['price']) ?? 0
+//           : (data['price'] ?? 0).toDouble(),
 //       description: data['description'] ?? '',
 //       category: data['category'] ?? '',
-//       imageUrls: List<String>.from(data['imageUrls'] ?? []),
+//       mediaUrls:
+//           (data['media'] as List<dynamic>?)
+//               ?.map((item) => item['url'] as String)
+//               .toList() ??
+//           [],
 //       createdBy: data['createdBy'] ?? '',
 //     );
+//   }
+
+//   Map<String, dynamic> toMap() {
+//     return {
+//       'name': name,
+//       'price': price,
+//       'description': description,
+//       'category': category,
+//       'createdBy': createdBy,
+//     };
 //   }
 // }
 class Productmodels {
@@ -35,7 +52,7 @@ class Productmodels {
   final double price;
   final String description;
   final String category;
-  final List<String> imageUrls;
+  final List<String> mediaUrls;
   final String createdBy;
 
   Productmodels({
@@ -44,31 +61,47 @@ class Productmodels {
     required this.price,
     required this.description,
     required this.category,
-    required this.imageUrls,
+    required this.mediaUrls,
     required this.createdBy,
   });
 
-  /// Convert Firestore document → Productmodels
   factory Productmodels.fromFirestore(Map<String, dynamic> data, String id) {
     return Productmodels(
       id: id,
-      name: data['name'] ?? '',
-      price: (data['price'] ?? 0).toDouble(),
+
+      // 🔥 FIXED (important for search)
+      name: (data['name'] ?? '').toString().toLowerCase(),
+
+      price: data['price'] is String
+          ? double.tryParse(data['price']) ?? 0
+          : (data['price'] ?? 0).toDouble(),
+
       description: data['description'] ?? '',
       category: data['category'] ?? '',
-      imageUrls: List<String>.from(data['imageUrls'] ?? []),
+
+      // 🔥 SAFE MEDIA PARSING
+      mediaUrls:
+          (data['media'] as List<dynamic>?)
+              ?.map((item) {
+                if (item is Map && item['url'] != null) {
+                  return item['url'].toString();
+                }
+                return '';
+              })
+              .where((url) => url.isNotEmpty)
+              .toList() ??
+          [],
+
       createdBy: data['createdBy'] ?? '',
     );
   }
 
-  /// Convert Productmodels → Firestore map
   Map<String, dynamic> toMap() {
     return {
       'name': name,
       'price': price,
       'description': description,
       'category': category,
-      'imageUrls': imageUrls,
       'createdBy': createdBy,
     };
   }

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shopio/Pages/shipping_address_page.dart';
 import 'package:shopio/Pages/uploadproductpage.dart';
+
 import 'package:shopio/authentication/loginpage.dart';
 import 'package:shopio/authentication/signup.dart';
 import 'package:shopio/provider/profile_provider.dart';
 import 'package:shopio/Pages/editprofilepage.dart';
 import 'package:shopio/widget/buttoncolor.dart';
+import 'package:shopio/widget/ownproduct.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -19,6 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+
     Future.microtask(() => context.read<ProfileProvider>().loadProfile());
   }
 
@@ -105,12 +109,22 @@ class _ProfilePageState extends State<ProfilePage> {
                 MaterialPageRoute(builder: (_) => const EditProfilePage()),
               );
             }),
+            buildMenuItem(Icons.shop, "view products", () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const OwnProductPage()),
+              );
+            }),
 
             buildMenuItem(Icons.notifications, "Notification", () {}),
 
-            buildMenuItem(Icons.location_on, "Shipping Address", () {}),
-
-            buildMenuItem(Icons.lock, "Change Password", () {}),
+            //shipping adrs page
+            buildMenuItem(Icons.location_on, "Shipping Address", () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ShippingAddressPage()),
+              );
+            }),
 
             const SizedBox(height: 20),
 

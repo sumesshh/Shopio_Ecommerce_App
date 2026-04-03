@@ -29,7 +29,11 @@ class _CategoryProductsPageState extends State<CategoryProductsPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F2),
 
-      appBar: AppBar(title: Text(widget.category), centerTitle: true),
+      appBar: AppBar(
+        title: Text(widget.category),
+        centerTitle: true,
+        backgroundColor: Color(0xFFF2F2F2),
+      ),
 
       body: StreamBuilder<QuerySnapshot>(
         stream: productsStream,
@@ -81,6 +85,7 @@ class _CategoryProductsPageState extends State<CategoryProductsPage> {
                 },
 
                 child: Card(
+                  color: const Color(0xFFF2F2F2),
                   elevation: 3,
 
                   shape: RoundedRectangleBorder(
@@ -97,9 +102,9 @@ class _CategoryProductsPageState extends State<CategoryProductsPage> {
                             top: Radius.circular(12),
                           ),
 
-                          child: product.imageUrls.isNotEmpty
+                          child: product.mediaUrls.isNotEmpty
                               ? Image.network(
-                                  product.imageUrls[0],
+                                  product.mediaUrls[0],
                                   fit: BoxFit.cover,
                                   width: double.infinity,
                                 )

@@ -49,6 +49,15 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  Future<String?> resetPassword(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      return null;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
   //login page
   Future<String?> login(String email, String password) async {
     _isloading = true;
